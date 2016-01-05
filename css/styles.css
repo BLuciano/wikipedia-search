@@ -18,8 +18,8 @@ form p{
 	height: 40px;
 	border-radius: 25px;
 	border: 5px solid #fff;
-	-webkit-transition: all .5s linear;
-    transition: all .5s linear;
+	-webkit-transition: all .25s linear;
+    transition: all .25s linear;
 }
 
 form span{
@@ -31,8 +31,8 @@ form span{
 	-webkit-transform: rotate(-45deg);
     -ms-transform: rotate(-45deg);
     transform: rotate(-45deg);
-    -webkit-transition: all .25s linear;
-    transition: all .25s linear;
+    -webkit-transition: all .15s linear;
+    transition: all .15s linear;
 }
 
 form p:hover{
@@ -41,8 +41,8 @@ form p:hover{
 
 .animate-p{
 	width: 260px;
-	-webkit-transition: all .5s linear;
-    transition: all .5s linear;
+	-webkit-transition: all .25s linear;
+    transition: all .25s linear;
 }
 
 .animate-span{
@@ -54,8 +54,8 @@ form p:hover{
     margin-left: 100px;
     margin-top: -45px;
     font-size: 2em;
-	-webkit-transition: all .25s linear;
-    transition: all .25s linear;
+	-webkit-transition: all .15s linear;
+    transition: all .15s linear;
     cursor: pointer;
 }
 

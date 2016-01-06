@@ -1,7 +1,7 @@
 (function(){
-  var wikiData = "", searchFor;
+  var wikiData = "", dropData = "", searchFor = "", search = "";
   var url ='https://en.wikipedia.org/w/api.php';
-
+  
   $("#search p").click(function(){
     $(this).addClass("animate-p");
     $("#search span").html("x").addClass("animate-span");
@@ -14,40 +14,100 @@
     $("#search p").removeClass("animate-p");      
     $("#search input").val("").css("display", "none");
     $("#search label").html("Click Icon to Search");
+    search = "";
+    $("#dropMenu").html("");
   });
 
-  $("#search form")[0].onkeypress = function(e){
+  //Checks user keyboard input
+  $("#search form")[0].onkeydown = function(e){
     if (!e) e = window.event;
-      var keyCode = e.keyCode || e.which;
+    var keyCode = e.keyCode || e.which;
+    search += String.fromCharCode(keyCode);
+    if(keyCode == '8' || keyCode == '46'){
+      search = search.slice(0, search.length -2);
+    }
+    if(search !== ""){
+      searchBox(search);
+    } else {
+      $("#dropMenu").html("");
+    }
     
-    if (keyCode == '13'){
+    if(keyCode == '13'){
+      search = "";
       searchFor = $("#search input").val();
       $("#search label").html("searching...");
       
       if($("#search input").val().length === 0){
-        var randomUrl = "http://randomword.setgetgo.com/get.php";
-        $.ajax({
-            type: "GET",
-            url: randomUrl,
-            dataType: "jsonp"
-        })
-        .done(function(data){
-          searchFor = data.Word;
-          searchWiki();
-          $("#search input").val(data.Word);
-        })
-        .fail(function(error){
-          $("#search label").html("Error retrieving a random word");
-        });
+        searchRandom();
       } else{
         searchWiki();
         $("#search input").val("");
       }
-   
+      $("#dropMenu").html("");
       return false;
     }
   }
 
+  //Binds click events for the dropDown menu items.
+  function bindClicks(){
+    $("#dropMenu li").click(function(){
+      searchFor = $(this).html(); 
+      searchWiki();
+      $("#dropMenu").html("");
+      $("#search input").val($(this).html());
+      search = "";
+    });
+  }
+
+  //Displays the dropwDown menu items from the provided random word.
+  function searchBox(word){
+    $("#dropMenu").html("");
+    $.ajax({
+      url : url,
+      jsonp: "callback",
+      dataType: "jsonp",
+      data: {
+        action: "query",
+        list: "allpages",
+        format: "json",
+        apfrom: word,
+        aplimit: 5
+      },
+      xhrFields: { withCredentials: true }
+    })
+    .done(function(data){
+      data = data.query.allpages;
+      for(var key in data){
+        dropData = "";
+        dropData += "<li>" + data[key].title + "</li>";
+        $("#dropMenu").append(dropData);
+      }
+      bindClicks();
+    })
+    .fail(function(error){
+      console.log("error");
+    });
+  }
+
+  //Searches a random word from an API, used on empty search
+  function searchRandom(){
+    var randomUrl = "http://randomword.setgetgo.com/get.php";
+    $.ajax({
+      type: "GET",
+      url: randomUrl,
+      dataType: "jsonp"
+    })
+    .done(function(data){
+      searchFor = data.Word;
+      searchWiki();
+      $("#search input").val(data.Word);
+    })
+    .fail(function(error){
+      $("#search label").html("Error retrieving a random word");
+    });
+  }
+
+  //Searches Wikipedia and displays results on page
   function searchWiki(){
     $.ajax({
       url: url,

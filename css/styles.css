@@ -80,11 +80,32 @@ input:focus{
 
 label{
 	display: block;
-	margin-top: 25px;
+	margin-bottom: 25px;
 	color:#fff;
 	font-weight: 600;
 }
 
+#dropMenu{
+	position: absolute;
+	background-color: rgba(0,0,0,.75);
+	color: #fff;
+	right: 0;
+	left: 0;
+	margin: 0 auto;
+	width: 200px;
+	list-style: none;
+}
+
+#dropMenu li{
+	text-align: center;
+	padding: 7px 5px;
+	margin-left: -40px;
+	border-bottom: 1px solid #fff;
+}
+
+#dropMenu li:hover{
+	cursor: pointer;
+}
 
 /******RESULTS*****/
 #results{	
